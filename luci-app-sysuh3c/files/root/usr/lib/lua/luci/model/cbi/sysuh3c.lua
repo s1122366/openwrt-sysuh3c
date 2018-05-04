@@ -10,7 +10,7 @@ You may obtain a copy of the License at
 	http://www.apache.org/licenses/LICENSE-2.0
 ]]--
 
-require("luci.sys")
+local sys = require("luci.sys")
 
 m = Map("sysuh3c", translate("SYSU H3C Client"), translate("Configure H3C 802.1x client."))
 
@@ -19,18 +19,29 @@ s.addremove = false
 s.anonymous = true
 
 enable = s:option(Flag, "enable", translate("Enable"))
+blockstartup = s:option(Flag, "blockstartup", translate("Block Startup Sequence"),
+	"If enabled, the client will block startup sequence until authenticated")
 name = s:option(Value, "username", translate("Username"))
 pass = s:option(Value, "password", translate("Password"))
 pass.password = true
 
-method = s:option(ListValue, "method", translate("Cipher Method"))
-method:value("xor",translate("xor"))  
-method:value("md5",translate("md5"))  
+method = s:option(ListValue, "method", translate("EAP Method"))
+method:value("xor")  
+method:value("md5")  
 
 ifname = s:option(ListValue, "ifname", translate("Interfaces"))
-for k, v in ipairs(luci.sys.net.devices()) do
+for k, v in ipairs(sys.net.devices()) do
 	if v ~= "lo" then
 		ifname:value(v)
+	end
+end
+
+getwanif = s:option(Button, "_getwanif", translate("Get WAN interface"))
+getwanif.inputstyle = "apply"
+getwanif.write = function(self, section)
+	local ifname = sys.exec("uci get network.wan.ifname")
+	if ifname ~= nil then
+		self.map:set(section, "ifname", ifname)
 	end
 end
 

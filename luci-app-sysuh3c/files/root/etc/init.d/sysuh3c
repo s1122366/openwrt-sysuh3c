@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-START=50
+START=70
 
 run_h3c()
 {
@@ -11,14 +11,19 @@ run_h3c()
 		local password
 		local method
 		local ifname
-		
+		local blockstartup
+
 		config_get username $1 username
 		config_get password $1 password
 		config_get method $1 method
 		config_get ifname $1 ifname
-		
-		echo $password | sysuh3c -u $username -i $ifname -m $method &
-		
+		config_get blockstartup $1 blockstartup
+
+		if [ $blockstartup ]; then
+			sysuh3c -u $username -p $password -i $ifname -m $method
+		else
+			sysuh3c -u $username -p $password -i $ifname -m $method &
+		fi
 	fi
 }
 
