@@ -17,7 +17,7 @@ run_h3c()
 		config_get password $1 password
 		config_get method $1 method
 		config_get ifname $1 ifname
-		config_get blockstartup $1 blockstartup
+		config_get_bool blockstartup $1 blockstartup
 
 		if [ $blockstartup == 1 ]; then
 			sysuh3c -u $username -p $password -i $ifname -m $method
