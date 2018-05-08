@@ -36,6 +36,7 @@ for k, v in ipairs(sys.net.devices()) do
 	end
 end
 
+--[[
 getwanif = s:option(Button, "_getwanif", translate("Get WAN interface"))
 getwanif.inputstyle = "apply"
 getwanif.write = function(self, section)
@@ -44,6 +45,7 @@ getwanif.write = function(self, section)
 		self.map:set(section, "ifname", ifname)
 	end
 end
+]]--
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then

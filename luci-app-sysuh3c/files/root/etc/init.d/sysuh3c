@@ -6,7 +6,7 @@ run_h3c()
 	local enable
 	config_get_bool enable $1 enable
 	
-	if [ $enable ]; then
+	if [ $enable == 1 ]; then
 		local username
 		local password
 		local method
@@ -19,7 +19,7 @@ run_h3c()
 		config_get ifname $1 ifname
 		config_get blockstartup $1 blockstartup
 
-		if [ $blockstartup ]; then
+		if [ $blockstartup == 1 ]; then
 			sysuh3c -u $username -p $password -i $ifname -m $method
 		else
 			sysuh3c -u $username -p $password -i $ifname -m $method &
