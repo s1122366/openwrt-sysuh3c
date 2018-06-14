@@ -20,8 +20,12 @@ run_h3c()
 		config_get_bool blockstartup $1 blockstartup
 
 		if [ "$blockstartup" == 1 ]; then
-			sysuh3c -u $username -p $password -i $ifname -m $method
+			while ! sysuh3c -u $username -p $password -i $ifname -m $method ; do
+				echo sysuh3c: process exited unexpectedly, restarting..
+				sleep 1
+			done
 		else
+			sleep 5
 			sysuh3c -u $username -p $password -i $ifname -m $method &
 		fi
 	fi
