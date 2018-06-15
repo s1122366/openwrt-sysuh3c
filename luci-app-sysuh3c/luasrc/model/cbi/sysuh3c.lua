@@ -15,7 +15,7 @@ local sys = require("luci.sys")
 m = Map("sysuh3c", translate("SYSU H3C Client"), translate("Configure H3C 802.1x client."))
 
 s = m:section(TypedSection, "login", "")
-s.addremove = false
+s.addremove = true
 s.anonymous = true
 
 enable = s:option(Flag, "enable", translate("Enable"))
@@ -46,10 +46,10 @@ getwanif.write = function(self, section)
 	end
 end
 ]]--
-
+--[[
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
 	io.popen("/etc/init.d/sysuh3c restart")
 end
-
+]]--
 return m
